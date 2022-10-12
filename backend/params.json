@@ -1,0 +1,7 @@
+{
+    "host": "localhost",
+    "port": 4000,
+    "httpsserver": false,
+    "SRCFOLDER": "/test",
+    "SRCFILE": "/test/index.html"
+}
