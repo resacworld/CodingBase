@@ -1,3 +1,3 @@
 interface Window {
-  __STATE__: import('../shared/types.ts').AppState
+  __STATE__: import('../server/router.ts').AppState
 }

@@ -1,29 +1,19 @@
 import fs from 'node:fs/promises'
 import express from 'express'
 import type { ViteDevServer } from 'vite'
-import type { AppState, NewTodo, Todo } from './shared/types.ts'
+import { createExpressMiddleware } from '@trpc/server/adapters/express'
+import { appRouter, type AppState } from './server/router.ts'
 
 type Render = typeof import('./src/entry-server.ts').render
 
 const isProd = process.env.NODE_ENV === 'production'
 const port = Number(process.env.PORT) || 3000
 
-// ponytail: in-memory store, lost on restart; swap for a DB when it matters.
-const todos: Todo[] = [{ id: 1, title: 'Tester le SSR' }]
+// SSR calls procedures directly, no HTTP round-trip.
+const caller = appRouter.createCaller({})
 
 const app = express()
-app.use(express.json())
-
-app.post('/api/todos', (req: express.Request<{}, Todo, Partial<NewTodo>>, res: express.Response<Todo>) => {
-  const title = req.body?.title
-  if (typeof title !== 'string' || !title.trim()) {
-    res.sendStatus(400)
-    return
-  }
-  const todo: Todo = { id: todos.length + 1, title: title.trim() }
-  todos.push(todo)
-  res.status(201).json(todo)
-})
+app.use('/trpc', createExpressMiddleware({ router: appRouter }))
 
 let vite: ViteDevServer | undefined
 let prodTemplate = ''
@@ -48,7 +38,7 @@ app.use(async (req, res, next) => {
       template = await vite.transformIndexHtml(req.originalUrl, await fs.readFile('index.html', 'utf-8'))
       render = (await vite.ssrLoadModule('/src/entry-server.ts')).render
     }
-    const state: AppState = { todos }
+    const state: AppState = { todos: await caller.todoList() }
     // Escape "<" so user data can't close the <script> tag (XSS).
     const stateScript = `<script>window.__STATE__=${JSON.stringify(state).replace(/</g, '\\u003c')}</script>`
     const html = template

@@ -9,8 +9,11 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@trpc/client": "^11.19.0",
+    "@trpc/server": "^11.19.0",
     "express": "^5.2.1",
-    "vue": "^3.5.43"
+    "vue": "^3.5.43",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
