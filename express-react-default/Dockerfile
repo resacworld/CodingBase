@@ -4,7 +4,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --ignore-scripts
 COPY . .
-RUN npx prisma generate && npm run build
+# generate never connects, but prisma.config.ts requires the var to be set.
+RUN DATABASE_URL=file:/tmp/build.db npx prisma generate && npm run build
 
 # --- runtime: prod deps only
 FROM node:24-slim
