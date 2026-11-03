@@ -1,13 +1,7 @@
 import type { Todo } from '../models/todo.ts'
-
-// ponytail: in-memory store, lost on restart; swap for a DB when it matters.
-const todos: Todo[] = [{ id: 1, title: 'Tester le SSR' }]
+import { db } from './db.ts'
 
 export const todoRepository = {
-  findAll: async (): Promise<Todo[]> => todos,
-  create: async (title: string): Promise<Todo> => {
-    const todo = { id: todos.length + 1, title }
-    todos.push(todo)
-    return todo
-  },
+  findAll: (): Promise<Todo[]> => db.todo.findMany({ orderBy: { id: 'asc' } }),
+  create: (title: string): Promise<Todo> => db.todo.create({ data: { title } }),
 }

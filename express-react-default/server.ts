@@ -1,5 +1,3 @@
-process.loadEnvFile() // Load environment variables from .env file
-
 import express from 'express'
 import { errorHandler } from './src/middlewares/errorHandler.ts'
 import { Page404Handler } from './src/middlewares/page404Handler.ts'

@@ -6,13 +6,20 @@
   "type": "module",
   "main": "server.ts",
   "scripts": {
-    "dev": "tsx watch --exclude \"client/**\" server.ts",
+    "dev": "tsx watch --env-file-if-exists=.env --exclude \"client/**\" server.ts",
     "build": "vite build --outDir dist/client && vite build --ssr client/entry-server.tsx --outDir dist/server",
-    "start_prod": "cross-env NODE_ENV=production node server.ts",
+    "start_prod": "cross-env NODE_ENV=production node --env-file-if-exists=.env server.ts",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/adapter-libsql": "^7.10.1",
+    "@prisma/client": "^7.10.1",
     "express": "^5.3.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
@@ -24,6 +31,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.2.1",
     "cross-env": "^10.1.0",
+    "prisma": "^7.10.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.5"
