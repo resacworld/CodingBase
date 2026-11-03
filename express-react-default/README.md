@@ -47,3 +47,20 @@ Ajouter une page SSR : une variante dans `AppState` + un `case` dans `Page` + un
 npm run dev         # http://localhost:3000
 npm run build && npm run start_prod
 ```
+
+## Docker / CD
+
+`Dockerfile` : build multi-stage, au démarrage `prisma migrate deploy` puis `node server.ts`. La base SQLite est dans le volume `/data`.
+
+```
+docker build -t express-react-default .
+docker run -p 3000:3000 -v app-data:/data express-react-default
+```
+
+Le workflow `.github/workflows/express-react-default.yml` (à la racine du repo) construit l'image et la publie sur `ghcr.io/<owner>/express-react-default` (tags `latest` et `sha-xxxx`) à chaque push sur `main` qui touche ce dossier, puis déclenche le redéploiement sur Coolify.
+
+Setup Coolify (une fois) :
+1. Nouvelle ressource **Docker Image** : `ghcr.io/<owner>/express-react-default:latest`, port `3000`.
+2. Image GHCR privée : ajouter les identifiants du registre sur le serveur (`docker login ghcr.io` avec un PAT `read:packages`), ou rendre le package public.
+3. **Persistent Storage** : monter un volume sur `/data` (sinon la base SQLite est perdue à chaque déploiement).
+4. Secrets GitHub du repo : `COOLIFY_WEBHOOK` (URL du Deploy Webhook de la ressource) et `COOLIFY_TOKEN` (API token avec la permission deploy).
