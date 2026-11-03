@@ -13,5 +13,5 @@
     "erasableSyntaxOnly": true,
     "skipLibCheck": true
   },
-  "include": ["server.ts", "vite.config.ts", "src", "client"]
+  "include": ["server.ts", "vite.config.ts", "prisma.config.ts", "prisma", "src", "client"]
 }

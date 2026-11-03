@@ -4,10 +4,30 @@ on:
   push:
     branches: [main]
     paths: [express-react-default/**, .github/workflows/express-react-default.yml]
+  pull_request:
+    paths: [express-react-default/**, .github/workflows/express-react-default.yml]
   workflow_dispatch:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: express-react-default
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: express-react-default/package-lock.json
+      - run: npm ci --ignore-scripts
+      - run: npm run lint
+
+  # Build + deploy only if lint passed, and never for PRs.
   docker:
+    needs: lint
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read

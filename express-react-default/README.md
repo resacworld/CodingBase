@@ -64,3 +64,9 @@ Setup Coolify (une fois) :
 2. Image GHCR privée : ajouter les identifiants du registre sur le serveur (`docker login ghcr.io` avec un PAT `read:packages`), ou rendre le package public.
 3. **Persistent Storage** : monter un volume sur `/data` (sinon la base SQLite est perdue à chaque déploiement).
 4. Secrets GitHub du repo : `COOLIFY_WEBHOOK` (URL du Deploy Webhook de la ressource) et `COOLIFY_TOKEN` (API token avec la permission deploy).
+
+## Lint / CI
+
+`npm run lint` (oxlint ; typescript-eslint ne supporte pas TypeScript 7). Config : `.oxlintrc.json`.
+
+CI : le job `lint` du workflow tourne après chaque push sur `main` et sur chaque PR ; le build Docker et le déploiement Coolify ne partent que s'il passe.

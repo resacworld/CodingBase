@@ -1,4 +1,4 @@
-import type { ErrorRequestHandler, RequestHandler } from 'express'
+import type { ErrorRequestHandler } from 'express'
 
 export class HttpError extends Error {
   status: number

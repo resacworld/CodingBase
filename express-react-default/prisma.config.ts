@@ -1,4 +1,3 @@
-import express from 'express'
 import { existsSync } from 'node:fs'
 import { defineConfig, env } from 'prisma/config'
 
