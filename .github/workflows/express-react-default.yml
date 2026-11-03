@@ -44,7 +44,7 @@ jobs:
       # COOLIFY_WEBHOOK: resource > Webhooks > "Deploy Webhook" URL. COOLIFY_TOKEN: Keys & Tokens > API tokens (deploy permission).
       - name: Deploy on Coolify
         run: |
-          curl --fail-with-body -sS "$COOLIFY_WEBHOOK" -H "Authorization: Bearer $COOLIFY_TOKEN"
+          curl --fail-with-body -sS -X POST "$COOLIFY_WEBHOOK" -H "Authorization: Bearer $COOLIFY_TOKEN"
         env:
           COOLIFY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
           COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
