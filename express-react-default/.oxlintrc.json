@@ -1,12 +1,19 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "react", "import"],
-  "categories": { "correctness": "error", "suspicious": "warn" },
+  "plugins": ["typescript", "react", "import", "jsx-a11y", "promise"],
+  "categories": { "correctness": "error", "suspicious": "warn", "perf": "warn" },
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/react-in-jsx-scope": "off",
-    "no-underscore-dangle": "off"
+    "react/no-array-index-key": "warn",
+    "no-underscore-dangle": "off",
+
+    "eqeqeq": "error",
+    "prefer-const": "error",
+    "no-var": "error",
+    "typescript/no-explicit-any": "error",
+    "import/no-cycle": "error"
   },
   "ignorePatterns": ["dist", "src/generated"]
 }
