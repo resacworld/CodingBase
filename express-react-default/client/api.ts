@@ -1,12 +1,5 @@
-import type { Todo } from '../src/models/todo.ts'
+import { createTRPCClient, httpBatchLink } from '@trpc/client'
+// `import type` only: no server code ends up in the client bundle.
+import type { AppRouter } from '../src/endpoint/appRouter.ts'
 
-async function request<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...init })
-  if (!res.ok) throw new Error((await res.json()).error ?? res.statusText)
-  return res.json()
-}
-
-export const api = {
-  todoList: () => request<Todo[]>('/api/todos'),
-  todoAdd: (title: string) => request<Todo>('/api/todos', { method: 'POST', body: JSON.stringify({ title }) }),
-}
+export const api = createTRPCClient<AppRouter>({ links: [httpBatchLink({ url: '/trpc' })] })

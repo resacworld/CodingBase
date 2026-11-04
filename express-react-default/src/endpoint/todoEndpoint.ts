@@ -1,13 +1,8 @@
-import { Router } from 'express'
+import { todoCreateInput } from '../models/todo.ts'
 import { todoService } from '../services/todoService.ts'
+import { publicProcedure, router } from './trpc.ts'
 
-// JSON API, used by the SPA (and anything else).
-export const todoEndpoint = Router()
-
-todoEndpoint.get('/', async (_req, res) => {
-  res.json(await todoService.list())
-})
-
-todoEndpoint.post('/', async (req, res) => {
-  res.status(201).json(await todoService.add(req.body?.title))
+export const todoEndpoint = router({
+  list: publicProcedure.query(() => todoService.list()),
+  add: publicProcedure.input(todoCreateInput).mutation(({ input }) => todoService.add(input)),
 })

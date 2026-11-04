@@ -1,11 +1,9 @@
-import { HttpError } from '../middlewares/errorHandler.ts'
+import type { TodoCreateInput } from '../models/todo.ts'
 import { todoRepository } from '../repositories/todoRepository.ts'
 
 // Business rules live here; endpoints stay thin, repositories stay dumb.
+// Input is already validated by the endpoint (zod), the service only gets clean data.
 export const todoService = {
   list: () => todoRepository.findAll(),
-  add: (title: unknown) => {
-    if (typeof title !== 'string' || !title.trim()) throw new HttpError(400, 'title is required')
-    return todoRepository.create(title.trim())
-  },
+  add: (input: TodoCreateInput) => todoRepository.create(input.title),
 }

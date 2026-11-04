@@ -8,7 +8,7 @@ export function SpaPage() {
   const [todos, setTodos] = useState<Todo[] | null>(null)
 
   useEffect(() => {
-    api.todoList().then(setTodos)
+    api.todo.list.query().then(setTodos)
   }, [])
 
   return (

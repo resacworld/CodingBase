@@ -11,14 +11,16 @@ src/                      ====> BACKEND
   generated/prisma/       -> Client Prisma généré (gitignoré, `prisma generate`)
   services/               ==> Définit les règles métier
   endpoint/               ==> Définit les routes 
-    todoEndpoint.ts       -> API JSON  -> /api/todos
+    trpc.ts               -> Init tRPC (router, publicProcedure)
+    appRouter.ts          -> Router tRPC racine -> /trpc (type AppRouter)
+    todoEndpoint.ts       -> Procédures todo.list / todo.add (validées par zod)
     pageEndpoint.ts       -> Pages HTML -> /ssr, /spa/*
   middlewares/            ==> Définis/créer les middlewares backend
   render.ts               -> Vite (dev) / dist (prod) + rendu SSR streamé
 client/                   ====> FRONTEND
   entry-server.tsx        -> AppState + rendu serveur
   entry-client.tsx        -> Hydrate si window.__STATE__, sinon rend la SPA
-  api.ts                  -> Fetch typé vers /api
+  api.ts                  -> Client tRPC, types inférés depuis AppRouter
   pages/                  ==> Composants de page
 index.html                ====> Template (<!--app-state--> / <!--app-html-->)
 prisma/                   ====> BDD : schema.prisma, migrations/, seed.ts
@@ -39,7 +41,9 @@ npm run db:deploy     # en prod : applique les migrations
 Passer à Postgres : `provider = "postgresql"` dans le schéma, `@prisma/adapter-pg` dans `src/repositories/db.ts`, et une `DATABASE_URL` postgres.
 
 - **SSR** (`/ssr`) : le serveur appelle le service, rend React, envoie le state ; le client hydrate.
-- **SPA** (`/spa/*`) : le serveur envoie le shell vide ; le client fetch `/api/todos`.
+- **SPA** (`/spa/*`) : le serveur envoie le shell vide ; le client appelle `api.todo.list.query()` (tRPC).
+
+Ajouter une route API : une procédure dans un router de `src/endpoint/`, branché dans `appRouter.ts`. Le front voit le nouveau type immédiatement, une erreur de signature casse le typecheck.
 
 Ajouter une page SSR : une variante dans `AppState` + un `case` dans `Page` + une route dans `pageEndpoint.ts`.
 

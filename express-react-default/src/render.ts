@@ -39,7 +39,7 @@ export async function renderPage(req: Request, res: Response, next: NextFunction
     if (!state) return res.type('html').send(template.replace('<!--app-state-->', '').replace('<!--app-html-->', ''))
 
     // Escape "<" so user data can't close the <script> tag (XSS).
-    const stateScript = `<script>window.__STATE__=${JSON.stringify(state).replace(/</g, '\u003c')}</script>`
+    const stateScript = `<script>window.__STATE__=${JSON.stringify(state).replace(/</g, '\\u003c')}</script>`
     const [head, tail] = template.replace('<!--app-state-->', stateScript).split('<!--app-html-->')
 
     // Send the head as soon as the shell is ready, then stream React's HTML, then the tail.

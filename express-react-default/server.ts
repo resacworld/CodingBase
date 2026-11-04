@@ -1,7 +1,8 @@
 import express from 'express'
 import { errorHandler } from './src/middlewares/errorHandler.ts'
 import { Page404Handler } from './src/middlewares/page404Handler.ts'
-import { todoEndpoint } from './src/endpoint/todoEndpoint.ts'
+import { createExpressMiddleware } from '@trpc/server/adapters/express'
+import { appRouter } from './src/endpoint/appRouter.ts'
 import { pageEndpoint } from './src/endpoint/pageEndpoint.ts'
 import { setupFrontend } from './src/render.ts'
 
@@ -10,7 +11,7 @@ const port = Number(process.env.PORT)
 const app = express()
 app.use(express.json())
 
-app.use('/api/todos', todoEndpoint)
+app.use('/trpc', createExpressMiddleware({ router: appRouter }))
 await setupFrontend(app) // before pages: serves /client/*, /@vite/* in dev and assets in prod
 app.use(pageEndpoint)
 

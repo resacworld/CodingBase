@@ -8,7 +8,7 @@ export function TodoList({ todos, setTodos }: { todos: Todo[]; setTodos: (fn: (p
 
   async function add(e: SyntheticEvent) {
     e.preventDefault()
-    const todo = await api.todoAdd(title)
+    const todo = await api.todo.add.mutate({ title })
     setTodos((prev) => [...prev, todo])
     setTitle('')
   }
