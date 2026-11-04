@@ -1,7 +1,9 @@
+import { lazy, Suspense } from 'react'
 import type { Todo } from '../src/models/todo.ts'
-import { SsrPage } from './pages/SsrPage.tsx'
-import { Ssr404Page } from './pages/Ssr404Page.tsx'
 
+// Lazy: each page is its own chunk, the browser only downloads the one it renders.
+const SsrPage = lazy(() => import('./pages/SsrPage.tsx').then((m) => ({ default: m.SsrPage })))
+const Ssr404Page = lazy(() => import('./pages/Ssr404Page.tsx').then((m) => ({ default: m.Ssr404Page })))
 
 /*
  Data rendered by the server and handed to the client for hydration. Add a page = add a variant.
@@ -16,6 +18,10 @@ export type AppState = { page: 'ssr' | '404'; todos: Todo[] }
  * @returns TSX component
  */
 export function Page({ state }: { state: AppState }) {
+  return <Suspense fallback={null}>{SsrPageSelect(state)}</Suspense>
+}
+
+function SsrPageSelect(state: AppState) {
   switch (state.page) {
     case 'ssr':
       return <SsrPage todos={state.todos} />
