@@ -18,8 +18,3 @@ pageEndpoint.get('/ssr', async (req, res, next) => {
 pageEndpoint.get('/spa{/*splat}', async (req, res, next) => {
   await renderPage(req, res, next)
 })
-
-
-pageEndpoint.get('/jspquoi', async (req, res, next) => {
-  await renderPage(req, res, next)
-})

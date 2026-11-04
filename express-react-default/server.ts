@@ -9,15 +9,24 @@ import { pageEndpoint } from './src/endpoint/pageEndpoint.ts'
 import { setupFrontend } from './src/render.ts'
 
 const app = express()
-app.set('trust proxy', 1) // behind Coolify's proxy: real client IP for the rate limit
+
+// Behind Coolify's proxy: real client IP for the rate limit
+app.set('trust proxy', 1) 
+
+// Apply securities
 app.use(nonce, securityHeaders)
 app.use(express.json({ limit: '100kb' }))
 
+// Initialize Trpc
 app.use('/trpc', apiRateLimit, createExpressMiddleware({ router: appRouter }))
 await setupFrontend(app) // before pages: serves /client/*, /@vite/* in dev and assets in prod
+
+// Initialize routes
 app.use(pageEndpoint)
 
+// Manage issues
 app.use(errorHandler)
 app.use(Page404Handler)
 
+// Listen on the port, the server is started ! 
 app.listen(env.PORT, () => console.log(`http://${isProd ? '0.0.0.0' : 'localhost'}:${env.PORT}`))

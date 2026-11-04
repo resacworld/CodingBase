@@ -1,5 +1,8 @@
 import type { ErrorRequestHandler } from 'express'
 
+/**
+ * Class to define an internal httpError
+ */
 export class HttpError extends Error {
   status: number
   constructor(status: number, message: string) {

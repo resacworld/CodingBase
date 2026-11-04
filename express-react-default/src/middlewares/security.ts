@@ -23,6 +23,7 @@ export const securityHeaders = helmet({
   strictTransportSecurity: isProd,
 })
 
+// Express rate limit 
 export const apiRateLimit = rateLimit({
   windowMs: 60_000,
   limit: isProd ? 100 : 99999,

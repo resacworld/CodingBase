@@ -1,8 +1,8 @@
-import { router } from './trpc.ts'
+import { trpcRouter } from './trpc.ts'
 import { todoEndpoint } from './todoEndpoint.ts'
 
 // tRPC API served on /trpc. Add a feature = add its router here.
-export const appRouter = router({
+export const appRouter = trpcRouter({
   todo: todoEndpoint,
 })
 

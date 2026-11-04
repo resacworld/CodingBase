@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-// Validated once at boot: a bad config crashes immediately with a clear message, not later at runtime.
+// .env format variables check
 const schema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']),
   PORT: z.coerce.number().int().min(1).max(65535),
@@ -13,5 +13,6 @@ if (!parsed.success) {
   process.exit(1)
 }
 
+// .env parsed variables 
 export const env = parsed.data
 export const isProd = env.NODE_ENV === 'production'

@@ -13,7 +13,12 @@ let vite: ViteDevServer | undefined
 let prodTemplate = ''
 let prodRender: Render | undefined
 
-// Dev: Vite middleware (HMR, on-the-fly TSX). Prod: static files from `npm run build`.
+/**
+ * Dev  : Vite middleware (HMR, on-the-fly TSX). 
+ * Prod : Static files from `npm run build`.
+ * 
+ * @param app Express app
+ */ 
 export async function setupFrontend(app: Express) {
   if (isProd) {
     prodTemplate = await fs.readFile('dist/client/index.html', 'utf-8')
@@ -27,7 +32,16 @@ export async function setupFrontend(app: Express) {
   }
 }
 
-// No state = SPA shell (empty #root). With state = React rendered server-side and streamed.
+/**
+ * No state   => SPA shell (empty #root). 
+ * With state => React SSR and streamed.
+ * 
+ * @param req Express request
+ * @param res Express response
+ * @param next Express next function
+ * @param state Appstate (if passed, SSR will be used)
+ * @param HTTPstatus Http standar code status (200, 404, etc...)
+ */
 export async function renderPage(req: Request, res: Response, next: NextFunction, state?: AppState, HTTPstatus: number = 200) {
   try {
     let template = prodTemplate
@@ -41,7 +55,10 @@ export async function renderPage(req: Request, res: Response, next: NextFunction
     const nonce: string = res.locals.nonce
     template = template.replace(/<script/g, `<script nonce="${nonce}"`)
 
-    if (!state) return res.type('html').send(template.replace('<!--app-state-->', '').replace('<!--app-html-->', ''))
+    if (!state) {
+      res.type('html').send(template.replace('<!--app-state-->', '').replace('<!--app-html-->', ''))
+      return;
+    } 
 
     // Escape "<" so user data can't close the <script> tag (XSS).
     const stateScript = `<script nonce="${nonce}">window.__STATE__=${JSON.stringify(state).replace(/</g, '\\u003c')}</script>`
