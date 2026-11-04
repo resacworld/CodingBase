@@ -23,6 +23,10 @@ jobs:
           cache-dependency-path: express-react-default/package-lock.json
       - run: npm ci --ignore-scripts
       - run: npm run lint
+      # Typecheck needs the generated Prisma types; generate never connects, but the config requires the var.
+      - run: npx prisma generate && npm run typecheck
+        env:
+          DATABASE_URL: file:/tmp/ci.db
       # Fails on known high/critical vulnerabilities in production dependencies.
       - run: npm audit --omit=dev --audit-level=high
 

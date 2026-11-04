@@ -45,7 +45,7 @@ Passer à Postgres : `provider = "postgresql"` dans le schéma, `@prisma/adapter
 
 Ajouter une route API : une procédure dans un router de `src/endpoint/`, branché dans `appRouter.ts`. Le front voit le nouveau type immédiatement, une erreur de signature casse le typecheck.
 
-Ajouter une page SSR : une variante dans `AppState` + un `case` dans `Page` + une route dans `pageEndpoint.ts`.
+Ajouter une page SSR : une variante dans `AppState` + un `case` dans `Page` + lazy load dans `Page.tsx` + une route dans `pageEndpoint.ts`.
 
 ```
 npm run dev         # http://localhost:3000

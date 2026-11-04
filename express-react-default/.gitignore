@@ -1,2 +1,3 @@
 dev.db*
 src/generated/
+.env

@@ -29,4 +29,7 @@ app.use(errorHandler)
 app.use(Page404Handler)
 
 // Listen on the port, the server is started ! 
-app.listen(env.PORT, () => console.log(`http://${isProd ? '0.0.0.0' : 'localhost'}:${env.PORT}`))
+const server = app.listen(env.PORT, () => console.log(`http://${isProd ? '0.0.0.0' : 'localhost'}:${env.PORT}`))
+
+// Docker stop / redeploy: finish in-flight requests, then exit (node as PID 1 ignores SIGTERM without a handler).
+process.on('SIGTERM', () => server.close(() => process.exit(0)))

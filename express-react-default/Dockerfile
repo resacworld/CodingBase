@@ -28,5 +28,5 @@ VOLUME /data
 USER node
 EXPOSE 3000
 
-# Apply pending migrations, then start.
-CMD ["sh", "-c", "npx prisma migrate deploy && node server.ts"]
+# Apply pending migrations, then start. `exec`: node replaces sh, so it receives SIGTERM on redeploy.
+CMD ["sh", "-c", "npx prisma migrate deploy && exec node server.ts"]
