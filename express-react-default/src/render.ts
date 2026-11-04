@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import { Writable } from 'node:stream'
 import express, { type Express, type NextFunction, type Request, type Response } from 'express'
 import type { ViteDevServer } from 'vite'
-import type { AppState } from '../client/entry-server.tsx'
+import type { AppState } from '../client/Page.tsx'
 import { isProd } from './env.ts'
 
 type Render = typeof import('../client/entry-server.tsx').render
@@ -28,7 +28,7 @@ export async function setupFrontend(app: Express) {
 }
 
 // No state = SPA shell (empty #root). With state = React rendered server-side and streamed.
-export async function renderPage(req: Request, res: Response, next: NextFunction, state?: AppState) {
+export async function renderPage(req: Request, res: Response, next: NextFunction, state?: AppState, HTTPstatus: number = 200) {
   try {
     let template = prodTemplate
     let render = prodRender!
@@ -51,7 +51,7 @@ export async function renderPage(req: Request, res: Response, next: NextFunction
     const { pipe, abort } = render(state, {
       nonce, // React's own inline streaming scripts (Suspense) need it too
       onShellReady() {
-        res.status(200).type('html').write(head)
+        res.status(HTTPstatus).type('html').write(head)
         pipe(
           new Writable({
             write(chunk, _encoding, callback) {

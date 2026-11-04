@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
-import { Page } from './entry-server.tsx'
+import { Page } from './Page.tsx'
 import { SpaPage } from './pages/SpaPage.tsx'
 
 const root = document.getElementById('root')!

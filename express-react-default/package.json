@@ -7,7 +7,7 @@
   "main": "server.ts",
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=.env --exclude \"client/**\" server.ts",
-    "build": "vite build --outDir dist/client && vite build --ssr client/entry-server.tsx --outDir dist/server",
+    "build": "cross-env NODE_ENV=production vite build --outDir dist/client && cross-env NODE_ENV=production vite build --ssr client/entry-server.tsx --outDir dist/server",
     "start_prod": "cross-env NODE_ENV=production node --env-file-if-exists=.env server.ts",
     "typecheck": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1",
