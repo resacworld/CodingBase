@@ -24,6 +24,8 @@
     "@trpc/client": "^11.24.0",
     "@trpc/server": "^11.24.0",
     "express": "^5.3.0",
+    "express-rate-limit": "^8.7.3",
+    "helmet": "^8.3.0",
     "prisma": "^7.10.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

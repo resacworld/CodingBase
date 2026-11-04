@@ -3,6 +3,7 @@ import { Writable } from 'node:stream'
 import express, { type Express, type NextFunction, type Request, type Response } from 'express'
 import type { ViteDevServer } from 'vite'
 import type { AppState } from '../client/entry-server.tsx'
+import { isProd } from './env.ts'
 
 type Render = typeof import('../client/entry-server.tsx').render
 
@@ -14,7 +15,7 @@ let prodRender: Render | undefined
 
 // Dev: Vite middleware (HMR, on-the-fly TSX). Prod: static files from `npm run build`.
 export async function setupFrontend(app: Express) {
-  if (process.env.NODE_ENV === 'production') {
+  if (isProd) {
     prodTemplate = await fs.readFile('dist/client/index.html', 'utf-8')
     const entry = '../dist/server/entry-server.js'
     prodRender = (await import(entry)).render
@@ -36,14 +37,19 @@ export async function renderPage(req: Request, res: Response, next: NextFunction
       render = (await vite.ssrLoadModule('/client/entry-server.tsx')).render
     }
 
+    // CSP: tag every script of the template (ours + Vite's) with this request's nonce.
+    const nonce: string = res.locals.nonce
+    template = template.replace(/<script/g, `<script nonce="${nonce}"`)
+
     if (!state) return res.type('html').send(template.replace('<!--app-state-->', '').replace('<!--app-html-->', ''))
 
     // Escape "<" so user data can't close the <script> tag (XSS).
-    const stateScript = `<script>window.__STATE__=${JSON.stringify(state).replace(/</g, '\\u003c')}</script>`
+    const stateScript = `<script nonce="${nonce}">window.__STATE__=${JSON.stringify(state).replace(/</g, '\\u003c')}</script>`
     const [head, tail] = template.replace('<!--app-state-->', stateScript).split('<!--app-html-->')
 
     // Send the head as soon as the shell is ready, then stream React's HTML, then the tail.
     const { pipe, abort } = render(state, {
+      nonce, // React's own inline streaming scripts (Suspense) need it too
       onShellReady() {
         res.status(200).type('html').write(head)
         pipe(

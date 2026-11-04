@@ -74,3 +74,13 @@ Setup Coolify (une fois) :
 `npm run lint` (oxlint ; typescript-eslint ne supporte pas TypeScript 7). Config : `.oxlintrc.json`.
 
 CI : le job `lint` du workflow tourne après chaque push sur `main` et sur chaque PR ; le build Docker et le déploiement Coolify ne partent que s'il passe.
+
+## Sécurité
+
+- `src/env.ts` : variables d'env validées par zod au démarrage (crash immédiat si invalide). Utiliser `env.X`, jamais `process.env.X`.
+- `src/middlewares/security.ts` :
+  - `helmet` : CSP, HSTS (prod), nosniff, anti-iframe… La CSP n'autorise que les `<script>` portant le nonce de la requête, ajouté automatiquement par `render.ts`. Script inline ajouté à la main ailleurs = bloqué.
+  - Rate limit sur `/trpc` : 100 req/min/IP (`trust proxy` activé pour l'IP réelle derrière Coolify).
+- Entrées : validées par zod dans `src/models/` (penser à toujours mettre un `.max()` sur les chaînes).
+- State SSR : `<` échappé dans `window.__STATE__` (anti-XSS).
+- CI : `npm audit --omit=dev --audit-level=high` bloque le déploiement si une dépendance de prod a une faille connue.

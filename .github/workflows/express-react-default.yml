@@ -23,6 +23,8 @@ jobs:
           cache-dependency-path: express-react-default/package-lock.json
       - run: npm ci --ignore-scripts
       - run: npm run lint
+      # Fails on known high/critical vulnerabilities in production dependencies.
+      - run: npm audit --omit=dev --audit-level=high
 
   # Build + deploy only if lint passed, and never for PRs.
   docker:

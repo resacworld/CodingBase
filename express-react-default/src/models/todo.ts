@@ -4,5 +4,5 @@ import { z } from 'zod'
 export type { Todo } from '../generated/prisma/browser.ts'
 
 // DTO: what the API accepts to create a todo (validated by tRPC before reaching the service).
-export const todoCreateInput = z.object({ title: z.string().trim().min(1) })
+export const todoCreateInput = z.object({ title: z.string().trim().min(1).max(200) })
 export type TodoCreateInput = z.infer<typeof todoCreateInput>

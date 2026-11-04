@@ -1,5 +1,7 @@
 import type { RequestHandler } from "express"
+import { renderPage } from "../render"
+import { todoService } from "../services/todoService"
 
-export const Page404Handler: RequestHandler = (_req, res) => {
-  res.status(404).json({ error: 'Page Not Found' })
+export const Page404Handler: RequestHandler = async (req, res, next) => {
+  await renderPage(req, res, next, { page: '404', todos: await todoService.list() })
 }

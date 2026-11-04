@@ -7,7 +7,7 @@ export function SsrPage({ todos: initialTodos }: { todos: Todo[] }) {
   const [todos, setTodos] = useState(initialTodos)
   return (
     <>
-      <h1>Todos (SSR) super modif</h1>
+      <h1>Todos (SSR)</h1>
       <TodoList todos={todos} setTodos={setTodos} />
     </>
   )
