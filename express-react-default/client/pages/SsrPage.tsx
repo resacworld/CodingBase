@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Todo } from '../../src/models/todo.ts'
+import type { Todo } from '../../src/types/todo.ts'
 import { TodoList } from './TodoList.tsx'
 
 // Data comes from the server (already in the HTML), no fetch on load.

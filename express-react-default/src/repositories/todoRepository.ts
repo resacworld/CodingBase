@@ -1,4 +1,4 @@
-import type { Todo } from '../models/todo.ts'
+import type { Todo } from '../types/todo.ts'
 import { db } from './db.ts'
 
 /*

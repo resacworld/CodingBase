@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api } from '../api.ts'
-import type { Todo } from '../../src/models/todo.ts'
+import type { Todo } from '../../src/types/todo.ts'
 import { TodoList } from './TodoList.tsx'
 
 // Empty HTML from the server; data fetched by the browser after load.

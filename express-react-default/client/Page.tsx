@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import type { Todo } from '../src/models/todo.ts'
+import type { Todo } from '../src/types/todo.ts'
 
 // Lazy: each page is its own chunk, the browser only downloads the one it renders.
 const SsrPage = lazy(() => import('./pages/SsrPage.tsx').then((m) => ({ default: m.SsrPage })))

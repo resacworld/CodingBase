@@ -1,4 +1,4 @@
-import type { TodoCreateInput } from '../models/todo.ts'
+import type { TodoCreateInput } from '../types/todo.ts'
 import { todoRepository } from '../repositories/todoRepository.ts'
 
 /* 

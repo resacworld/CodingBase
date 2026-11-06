@@ -1,6 +1,6 @@
 import { useState, type SyntheticEvent } from 'react'
 import { api } from '../api.ts'
-import type { Todo } from '../../src/models/todo.ts'
+import type { Todo } from '../../src/types/todo.ts'
 
 // Shared by both pages: only how the initial data arrives differs.
 export function TodoList({ todos, setTodos }: { todos: Todo[]; setTodos: (fn: (prev: Todo[]) => Todo[]) => void }) {

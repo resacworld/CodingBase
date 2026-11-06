@@ -1,4 +1,4 @@
-import { todoCreateInput } from '../models/todo.ts'
+import { todoCreateInput } from '../types/todo.ts'
 import { todoService } from '../services/todoService.ts'
 import { publicProcedure, trpcRouter } from './trpc.ts'
 
